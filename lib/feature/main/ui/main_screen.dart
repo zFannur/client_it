@@ -1,6 +1,9 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:client_it/app/router/app_router.dart';
 import 'package:client_it/feature/auth/domain/entities/user_entity/user_entity.dart';
 import 'package:flutter/material.dart';
 
+@RoutePage()
 class MainScreen extends StatelessWidget {
   const MainScreen({
     super.key,
@@ -14,9 +17,14 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("MainScreen"),
+        actions: [
+          IconButton(
+              onPressed: () => context.pushRoute(const UserRoute()),
+              icon: const Icon(Icons.account_box)),
+        ],
       ),
-      body: Center(
-        child: Text(userEntity.username),
+      body: Column(
+        children: [],
       ),
     );
   }

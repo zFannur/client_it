@@ -1,4 +1,4 @@
-abstract class AuthRepository {
+abstract class AppApi {
   Future<dynamic> signUp({
     required String password,
     required String username,
@@ -23,4 +23,6 @@ abstract class AuthRepository {
   });
 
   Future<dynamic> refreshToken({String? refreshToken});
+
+  Future<dynamic> request(String path);
 }

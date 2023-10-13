@@ -24,10 +24,20 @@ class NetworkAuthRepository implements AuthRepository {
   }
 
   @override
-  Future passwordUpdate(
-      {required String oldPassword, required String newPassword}) {
-    // TODO: implement passwordUpdate
-    throw UnimplementedError();
+  Future<String> passwordUpdate({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    try {
+      final Response response = await api.passwordUpdate(
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      );
+
+      return response.data["message"];
+    } catch (_) {
+      rethrow;
+    }
   }
 
   @override
@@ -62,7 +72,8 @@ class NetworkAuthRepository implements AuthRepository {
     required String email,
   }) async {
     try {
-      final response = await api.signUp(password: password, username: username, email: email);
+      final response = await api.signUp(
+          password: password, username: username, email: email);
 
       return UserDto.fromJson(response.data["data"]).toEntity();
     } catch (_) {
@@ -71,8 +82,16 @@ class NetworkAuthRepository implements AuthRepository {
   }
 
   @override
-  Future userUpdate({String? email, String? username}) {
-    // TODO: implement userUpdate
-    throw UnimplementedError();
+  Future<UserEntity> userUpdate({
+    String? email,
+    String? username,
+  }) async {
+    try {
+      final response = await api.userUpdate(username: username, email: email);
+
+      return UserDto.fromJson(response.data["data"]).toEntity();
+    } catch (_) {
+      rethrow;
+    }
   }
 }

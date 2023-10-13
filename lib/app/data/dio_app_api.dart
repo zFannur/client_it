@@ -31,10 +31,21 @@ class DioAppApi implements AppApi {
   }
 
   @override
-  Future<Response> passwordUpdate(
-      {required String oldPassword, required String newPassword}) {
-    // TODO: implement passwordUpdate
-    throw UnimplementedError();
+  Future<Response> passwordUpdate({
+    required String oldPassword,
+    required String newPassword,
+  }) {
+    try {
+      return dio.put(
+        "/auth/user",
+        data: {
+          "oldPassword": oldPassword,
+          "newPassword": newPassword,
+        },
+      );
+    } catch (_) {
+      rethrow;
+    }
   }
 
   @override
@@ -103,5 +114,19 @@ class DioAppApi implements AppApi {
     } catch (_) {
       rethrow;
     }
+  }
+
+  @override
+  Future fetch(RequestOptions requestOptions) {
+    try {
+      return dio.fetch(requestOptions);
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Response> fetchPosts() {
+    return dio.get("/data/posts");
   }
 }

@@ -12,10 +12,11 @@ class MockAuthRepository implements AuthRepository {
   }
 
   @override
-  Future passwordUpdate(
+  Future<String> passwordUpdate(
       {required String oldPassword, required String newPassword}) {
-    // TODO: implement passwordUpdate
-    throw UnimplementedError();
+    return Future.delayed(const Duration(seconds: 2), () {
+      return "Успешное обновление пароля";
+    });
   }
 
   @override
@@ -36,10 +37,11 @@ class MockAuthRepository implements AuthRepository {
   }
 
   @override
-  Future signUp(
-      {required String password,
-      required String username,
-      required String email}) {
+  Future signUp({
+    required String password,
+    required String username,
+    required String email,
+  }) {
     return Future.delayed(const Duration(seconds: 2), () {
       return UserEntity(
         email: email,
@@ -50,8 +52,16 @@ class MockAuthRepository implements AuthRepository {
   }
 
   @override
-  Future userUpdate({String? email, String? username}) {
-    // TODO: implement userUpdate
-    throw UnimplementedError();
+  Future userUpdate({
+    String? email,
+    String? username,
+  }) {
+    return Future.delayed(const Duration(seconds: 2), () {
+      return UserEntity(
+        email: email ?? "testEmail",
+        username: username ?? "test",
+        id: "-1",
+      );
+    });
   }
 }

@@ -10,6 +10,7 @@ import '../domain/app_config.dart';
 @Singleton(as: AppApi)
 class DioAppApi implements AppApi {
   late final Dio dio;
+  late final Dio dioTokens;
 
   DioAppApi(AppConfig appConfig) {
     final options = BaseOptions(
@@ -17,7 +18,10 @@ class DioAppApi implements AppApi {
       connectTimeout: const Duration(milliseconds: 15000),
     );
     dio = Dio(options);
-    if (kDebugMode) dio.interceptors.add(PrettyDioLogger());
+    if (kDebugMode) {
+      dio.interceptors.add(PrettyDioLogger());
+      dioTokens.interceptors.add(PrettyDioLogger());
+    }
     dio.interceptors.add(AuthInterceptor());
   }
 
@@ -51,7 +55,7 @@ class DioAppApi implements AppApi {
   @override
   Future<Response> refreshToken({String? refreshToken}) {
     try {
-      return dio.post("/auth/token/$refreshToken");
+      return dioTokens.post("/auth/token/$refreshToken");
     } catch (_) {
       rethrow;
     }
@@ -119,7 +123,7 @@ class DioAppApi implements AppApi {
   @override
   Future fetch(RequestOptions requestOptions) {
     try {
-      return dio.fetch(requestOptions);
+      return dioTokens.fetch(requestOptions);
     } catch (_) {
       rethrow;
     }
@@ -128,5 +132,26 @@ class DioAppApi implements AppApi {
   @override
   Future<Response> fetchPosts() {
     return dio.get("/data/posts");
+  }
+
+  @override
+  Future createPosts(Map args) {
+    return dio.post(
+      "/data/posts",
+      data: {
+        "name": args["name"],
+        "content": args["content"],
+      },
+    );
+  }
+
+  @override
+  Future fetchPost(String id) {
+    return dio.get("/data/posts/$id");
+  }
+
+  @override
+  Future deletePost(String id) {
+    return dio.delete("/data/posts/$id");
   }
 }

@@ -2,8 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:client_it/app/router/app_router.dart';
 import 'package:client_it/app/ui/components/app_dialog.dart';
 import 'package:client_it/feature/auth/domain/entities/user_entity/user_entity.dart';
+import 'package:client_it/feature/posts/domain/post_state/post_cubit.dart';
 import 'package:client_it/feature/posts/ui/post_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class MainScreen extends StatelessWidget {
@@ -27,7 +29,14 @@ class MainScreen extends StatelessWidget {
                 builder: (context) => AppDialog(
                   val1: "Название",
                   val2: "Содержание",
-                  onPressed: (v1, v2) {},
+                  onPressed: (v1, v2) {
+                    context.read<PostCubit>().createPosts(
+                      {
+                        "name": v1,
+                        "content": v2,
+                      },
+                    );
+                  },
                 ),
               );
             },

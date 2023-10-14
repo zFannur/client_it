@@ -6,6 +6,7 @@ import '../../feature/auth/ui/login_screen.dart';
 import '../../feature/auth/ui/register_screen.dart';
 import '../../feature/auth/ui/user_screen.dart';
 import '../../feature/main/ui/main_screen.dart';
+import '../../feature/posts/ui/detail_post_screen.dart';
 import '../ui/root_screen.dart';
 
 part 'app_router.gr.dart';
@@ -20,5 +21,6 @@ class AppRouter extends _$AppRouter {
     AutoRoute(path: '/register', page: RegisterRoute.page),
     AutoRoute(path: '/main', page: MainRoute.page),
     AutoRoute(path: '/user', page: UserRoute.page),
+    AutoRoute(path: '/detailPost', page: DetailPostRoute.page),
   ];
 }

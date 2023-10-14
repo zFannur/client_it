@@ -33,6 +33,7 @@ class PostCubit extends HydratedCubit<PostState> {
 
   Future<void> fetchPosts() async {
     try {
+      emit(state.copyWith(asyncSnapshot: const AsyncSnapshot.waiting()));
       final Iterable posts = await postRepository.fetchPosts();
       emit(state.copyWith(
           postList: posts.map((e) => PostEntity.fromJson(e)).toList(),
@@ -40,6 +41,15 @@ class PostCubit extends HydratedCubit<PostState> {
             ConnectionState.done,
             "Посты успешно загружены",
           )));
+    } catch (error) {
+      addError(error);
+    }
+  }
+
+  Future<void> createPosts(Map args) async {
+    try {
+      await postRepository.createPosts(args);
+      fetchPosts();
     } catch (error) {
       addError(error);
     }

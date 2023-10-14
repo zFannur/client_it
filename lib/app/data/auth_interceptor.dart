@@ -26,12 +26,20 @@ class AuthInterceptor extends QueuedInterceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
       try {
-        await locator.get<AuthCubit>().refreshToken();
-        final request =
-            await locator.get<AppApi>().fetch(err.requestOptions);
-        return handler.resolve(request);
-      } catch (_) {
-        super.onError(err, handler);
+        await locator.get<AuthCubit>().refreshToken().then(
+          (token) async {
+            if (token == null) {
+              super.onError(err, handler);
+            } else {
+              err.requestOptions.headers["Authorization"] = "Bearer $token";
+              final response =
+                  await locator.get<AppApi>().fetch(err.requestOptions);
+              return handler.resolve(response);
+            }
+          },
+        );
+      } on DioException catch (error) {
+        super.onError(error, handler);
       }
     } else {
       super.onError(err, handler);
